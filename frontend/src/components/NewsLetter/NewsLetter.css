@@ -1,0 +1,167 @@
+/* Main container */
+.newsletter {
+    width: min(65%, 1200px);
+    min-height: 40vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 3rem auto 9rem;
+    padding: clamp(2rem, 5vw, 8rem);
+    background: linear-gradient(
+        180deg, 
+        #fde1ff 0%, 
+        #e1ffea22 60%
+    );
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    gap: clamp(1.5rem, 3vw, 2rem);
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Typography */
+.newsletter h1 {
+    color: #454545;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    line-height: 1.2;
+    animation: slideDown 0.6s ease-out;
+}
+
+.newsletter p {
+    color: #454545;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    text-align: center;
+    max-width: 600px;
+    margin: 0;
+    animation: slideDown 0.6s ease-out 0.2s both;
+}
+
+/* Input container */
+.newsletter div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    width: min(90%, 730px);
+    height: clamp(50px, 8vh, 70px);
+    border-radius: 40px;
+    border: 1px solid #e3e3e3;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    animation: scaleIn 0.6s ease-out 0.4s both;
+}
+
+.newsletter div:focus-within {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-color: #fde1ff;
+}
+
+/* Input field */
+.newsletter input {
+    width: 100%;
+    padding: 0 clamp(1rem, 3vw, 2rem);
+    border: none;
+    outline: none;
+    color: #616161;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+}
+
+/* Button styles */
+.newsletter div button {
+    min-width: clamp(100px, 20%, 210px);
+    height: 100%;
+    border: none;
+    border-radius: 40px;
+    background: #171717;
+    color: white;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.newsletter div button:hover {
+    background: #454545;
+    transform: translateY(-1px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Media Queries */
+@media (max-width: 1280px) {
+    .newsletter {
+        margin: 2rem auto 7rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .newsletter {
+        margin: 2rem auto 4rem;
+        padding: clamp(1.5rem, 4vw, 6rem);
+    }
+}
+
+@media (max-width: 800px) {
+    .newsletter {
+        width: 80%;
+        margin: 1.5rem auto 2rem;
+        padding: clamp(1rem, 3vw, 4rem);
+    }
+}
+
+@media (max-width: 500px) {
+    .newsletter {
+        width: 90%;
+        margin: 1rem auto;
+        padding: 1rem;
+        min-height: auto;
+    }
+
+    .newsletter div {
+        flex-direction: column;
+        height: auto;
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .newsletter input {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+    }
+
+    .newsletter div button {
+        width: 100%;
+        padding: 0.75rem;
+    }
+}

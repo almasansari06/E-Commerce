@@ -1,0 +1,127 @@
+.shopcategory-banner {
+    display: block;
+    margin: 30px auto;
+    width: 82%;
+}
+
+.shopcategory-indexSort {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 170px;
+}
+
+.shopcategory-sort {
+    padding: 10px 20px;
+    border-radius: 40px;
+    border: 1px solid #888;
+}
+
+.shopcategory-span {
+    font-weight: 600;
+}
+
+.shopcategory-products {
+    margin: 20px 170px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.shopcategory-products img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+.shopcategory-loadmore {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 150px auto;
+    width: 233px;
+    height: 69px;
+    border-radius: 75px;
+    background: #ededed;
+    color: #424242;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+@media(max-width: 1280px) {
+    .shopcategory-banner {
+        width: 90%;
+        margin: 20px auto;
+    }
+    .shopcategory-indexSort {
+        width: 90%;
+        margin: auto;
+    }
+    .shopcategory-sort {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    .shopcategory-products {
+        width: 90%;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+        margin: 20px auto;
+    }
+}
+
+@media(max-width: 1024px) {
+    .shopcategory-indexSort {
+        width: 92%;
+    }
+    .shopcategory-products {
+        width: 92%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media(max-width: 800px) {
+    .shopcategory-indexSort {
+        flex-direction: column;
+        width: 92%;
+        gap: 10px;
+        margin: 0 auto 15px auto;
+    }
+    .shopcategory-sort {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+    .shopcategory-products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media(max-width: 500px) {
+    .shopcategory-banner {
+        width: 95%;
+    }
+    .shopcategory-indexSort {
+        width: 95%;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .shopcategory-sort {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+    .shopcategory-products {
+        width: 95%;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .shopcategory-loadmore {
+        width: 180px;
+        height: 55px;
+        font-size: 16px;
+        margin: 80px auto;
+    }
+}

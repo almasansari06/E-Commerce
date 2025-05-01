@@ -1,0 +1,141 @@
+/* Main container */
+.offers {
+    width: min(65%, 1200px);
+    min-height: 60vh;
+    display: flex;
+    margin: 2rem auto 9.375rem;
+    padding: clamp(1rem, 5vw, 8.75rem);
+    background: linear-gradient(
+        180deg, 
+        #fde1ff 0%, 
+        #e1ffea22 60%
+    );
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Left section */
+.offers-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    animation: slideIn 1s ease-out;
+}
+
+.offers-left h1 {
+    color: #171717;
+    font-size: clamp(2rem, 5vw, 5rem);
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.offers-left p {
+    color: #171717;
+    font-size: clamp(1rem, 2vw, 1.375rem);
+    font-weight: 600;
+    margin: 0;
+}
+
+.offers-left button {
+    width: fit-content;
+    padding: 1rem 2.5rem;
+    border-radius: 35px;
+    background: #ff4141;
+    border: none;
+    color: white;
+    font-size: clamp(0.875rem, 1.5vw, 1.375rem);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 65, 65, 0.2);
+}
+
+.offers-left button:hover {
+    transform: translateY(-2px);
+    background: #ff2c2c;
+    box-shadow: 0 6px 20px rgba(255, 65, 65, 0.3);
+}
+
+/* Right section */
+.offers-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: clamp(0.625rem, 2vw, 3.125rem);
+}
+
+.offers-right img {
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.5s ease;
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Media Queries */
+@media (max-width: 1280px) {
+    .offers {
+        margin-bottom: 7.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .offers {
+        margin-bottom: 5rem;
+        min-height: 40vh;
+    }
+}
+
+@media (max-width: 800px) {
+    .offers {
+        width: 80%;
+        margin-bottom: 3.75rem;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .offers {
+        flex-direction: column;
+        width: 90%;
+        min-height: auto;
+        padding: 1rem;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .offers-right {
+        justify-content: center;
+        padding-top: 0;
+    }
+
+    .offers-left {
+        align-items: center;
+        text-align: center;
+    }
+
+    .offers-left button {
+        padding: 0.75rem 2rem;
+    }
+}

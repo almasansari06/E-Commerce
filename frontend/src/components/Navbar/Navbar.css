@@ -1,0 +1,213 @@
+/* Main container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 8%;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Logo section */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-logo p {
+    color: #171717;
+    font-size: 32px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+/* Navigation menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 50px;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.nav-menu li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    position: relative;
+    color: #626262;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-menu li:hover {
+    color: #ff4141;
+}
+
+.nav-menu hr {
+    border: none;
+    width: 80%;
+    height: 3px;
+    background: #ff4141;
+    border-radius: 10px;
+    margin: 0;
+    transition: width 0.3s ease;
+}
+
+/* Login and cart section */
+.nav-login-cart {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+}
+
+.nav-login-cart button {
+    padding: 10px 40px;
+    border: 1px solid #7a7a7a;
+    border-radius: 75px;
+    color: #515151;
+    font-size: 18px;
+    font-weight: 500;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-login-cart button:hover {
+    background: #ff4141;
+    color: white;
+    border-color: #ff4141;
+}
+
+.nav-cart-count {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -35px;
+    margin-left: -55px;
+    border-radius: 11px;
+    font-size: 14px;
+    background: #ff4141;
+    color: white;
+}
+
+/* Mobile menu icon */
+.nav-dropdown {
+    display: none;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+/* Responsive Design */
+@media (max-width: 1280px) {
+    .navbar {
+        padding: 12px 4%;
+    }
+    .nav-logo p {
+        font-size: 28px;
+    }
+    .nav-menu {
+        gap: 30px;
+    }
+    .nav-login-cart button {
+        padding: 8px 30px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 12px 3%;
+    }
+    .nav-menu {
+        gap: 25px;
+        font-size: 16px;
+    }
+    .nav-login-cart button {
+        padding: 8px 20px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 800px) {
+    .navbar {
+        padding: 10px 2%;
+        position: relative;
+    }
+    .nav-dropdown {
+        display: block;
+        width: 30px;
+        transition: transform 0.3s ease;
+    }
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 15px 0;
+        margin: 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    .nav-menu li {
+        width: auto;
+        padding: 0;
+        border: none;
+    }
+    .nav-menu li:hover {
+        background-color: transparent;
+    }
+    .nav-menu hr {
+        display: block;
+    }
+    .nav-login-cart button {
+        padding: 6px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 500px) {
+    .navbar {
+        padding: 8px 15px;
+    }
+    .nav-logo p {
+        font-size: 24px;
+    }
+    .nav-login-cart {
+        gap: 20px;
+    }
+    .nav-login-cart button {
+        padding: 5px 15px;
+        font-size: 13px;
+    }
+    .nav-cart-count {
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+        margin-left: -40px;
+    }
+}
