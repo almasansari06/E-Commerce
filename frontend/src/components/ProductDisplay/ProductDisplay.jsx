@@ -3,7 +3,7 @@ import './ProductDisplay.css'
 import star_icon from '../Assets/star_icon.png';
 import star_dull_icon from '../Assets/star_dull_icon.png';
 import { ShopContext } from '../../Context/ShopContext';
-import { apiUrl } from '../../utils/api';
+import { apiUrl, assetUrl } from '../../utils/api';
 
 export default function ProductDisplay(props) {
     const{product} = props
@@ -59,10 +59,10 @@ export default function ProductDisplay(props) {
     <div className='productdisplay'>
       <div className="productdisplay-left">
         <div className="productdisplay-img-list">
-            {images.map((image) => <img key={image} className={selectedImage === image ? 'active' : ''} onClick={() => setSelectedImage(image)} src={image} alt={product.name} />)}
+            {images.map((image) => <img key={image} className={selectedImage === image ? 'active' : ''} onClick={() => setSelectedImage(image)} src={assetUrl(image)} alt={product.name} />)}
         </div>
         <div className="productdisplay-img">
-            <img className='productdisplay-main-img' src={selectedImage} alt={product.name} />
+            <img className='productdisplay-main-img' src={assetUrl(selectedImage)} alt={product.name} />
         </div>
       </div>
       <div className="productdisplay-right">
@@ -72,8 +72,8 @@ export default function ProductDisplay(props) {
           <p>({reviews.length})</p>
         </div>
         <div className="productdisplay-right-prices">
-            <div className="productdisplay-right-price-old">${product.old_price}</div>
-            <div className="productdislpay-right-price-new">${product.new_price}</div>
+            <div className="productdisplay-right-price-old">₹{product.old_price}</div>
+            <div className="productdislpay-right-price-new">₹{product.new_price}</div>
         </div>
         <div className="productdisplay-right-description">
           {product.description || 'A thoughtfully designed piece made for everyday wear.'}

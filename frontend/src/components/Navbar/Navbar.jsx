@@ -39,14 +39,14 @@ export default function Navbar() {
             <li onClick={()=>{setMenu("about"); setMenuOpen(false)}}><Link style={{textDecoration:'none'}} to='/about'>About</Link>{menu==="about"?<hr/>:<></>}</li>
             <li onClick={()=>{setMenu("contact"); setMenuOpen(false)}}><Link style={{textDecoration:'none'}} to='/contact'>Contact</Link>{menu==="contact"?<hr/>:<></>}</li>
             <li className="nav-mobile-account">
-                {isAuthenticated ? <><Link to='/orders' onClick={() => setMenuOpen(false)}>Orders</Link><button type="button" onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button></> : <Link to='/login' onClick={() => setMenuOpen(false)}>Login</Link>}
+                {isAuthenticated ? <><Link to='/profile' onClick={() => setMenuOpen(false)}>My Profile</Link><Link to='/orders' onClick={() => setMenuOpen(false)}>Orders</Link><button type="button" onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button></> : <Link to='/login' onClick={() => setMenuOpen(false)}>Login</Link>}
             </li>
 
         </ul>
         <div className="nav-login-cart">
             <button className="nav-search-button" type="button" onClick={() => setSearchOpen((open) => !open)} aria-label="Search products">Search</button>
             {isAuthenticated?
-            <div className="nav-account"><button className="nav-account-trigger" type="button" onClick={() => setAccountOpen((open) => !open)} aria-expanded={accountOpen}>Account <span>⌄</span></button>{accountOpen && <div className="nav-account-menu"><Link to='/orders' onClick={() => setAccountOpen(false)}>Orders</Link><button type="button" onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button></div>}</div>
+            <div className="nav-account"><button className="nav-account-trigger" type="button" onClick={() => setAccountOpen((open) => !open)} aria-expanded={accountOpen}>Account <span>⌄</span></button>{accountOpen && <div className="nav-account-menu"><Link to='/profile' onClick={() => setAccountOpen(false)}>My Profile</Link><Link to='/orders' onClick={() => setAccountOpen(false)}>Orders</Link><button type="button" onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button></div>}</div>
             :<Link to='/login'><button>Login</button></Link>}
             
             <Link className="nav-cart-link" to='/cart'><img src={cart_icon} alt="Cart" /><span className="nav-cart-count">{getTotalCartItems()}</span></Link>

@@ -5,7 +5,7 @@ import Item from '../Item/Item';
 import './ProductBrowser.css';
 import { apiUrl } from '../../utils/api';
 
-export default function ProductBrowser({ title = 'Shop all', category = '', showSidebar = false }) {
+export default function ProductBrowser({ title = 'Shop all', category = '', showSidebar = false, showHeading = true }) {
     const { all_product } = useContext(ShopContext);
     const [searchParams] = useSearchParams();
     const query = searchParams.get('search') || '';
@@ -38,13 +38,13 @@ export default function ProductBrowser({ title = 'Shop all', category = '', show
 
     return (
         <section className="product-browser">
-            <div className="product-browser-heading">
+            {showHeading && <div className="product-browser-heading">
                 <div>
                     <p className="product-browser-eyebrow">CURATED FOR YOU</p>
                     <h2>{title}</h2>
                 </div>
                 <span>{filteredProducts.length} products</span>
-            </div>
+            </div>}
             {showSidebar && <div className="product-browser-filter-bar">
                 {!category && (
                     <label>

@@ -77,7 +77,7 @@ export default function Orders() {
                         </div>
                         <div className="order-card-details">
                             <span>{order.items.length} item{order.items.length === 1 ? '' : 's'}</span>
-                            <strong>${order.amount}</strong>
+                            <strong>₹{order.amount}</strong>
                             <span>{order.paymentMethod === 'cod' ? 'Cash on delivery' : 'Online payment'}</span>
                         </div>
                         {currentStatus === 'Cancelled' && <p className="order-cancelled-message">{order.cancellationReason || 'Due to technical issue, your order has been cancelled.'}</p>}

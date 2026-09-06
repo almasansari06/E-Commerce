@@ -315,6 +315,16 @@ const users = mongoose.model('Users',{
         type:String,
         default:'active',
     },
+    profile: {
+        firstName: String,
+        lastName: String,
+        street: String,
+        city: String,
+        state: String,
+        postalCode: String,
+        country: String,
+        phone: String,
+    },
     date:{
         type:Date,
         default:Date.now,
@@ -529,6 +539,38 @@ const fetchUser = async (req, res, next) => {
       return res.status(401).send({ errors: "Please authenticate using a valid token" });
     }
   }
+
+app.get('/profile', fetchUser, async (req, res) => {
+    try {
+        const user = await users.findById(req.user.id).select('name email profile');
+        if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
+        res.json({ success: true, profile: { ...user.profile, email: user.email, firstName: user.profile?.firstName || user.name } });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Unable to load profile.' });
+    }
+});
+
+app.put('/profile', fetchUser, async (req, res) => {
+    try {
+        const profile = {
+            firstName: String(req.body.firstName || '').trim(),
+            lastName: String(req.body.lastName || '').trim(),
+            street: String(req.body.street || '').trim(),
+            city: String(req.body.city || '').trim(),
+            state: String(req.body.state || '').trim(),
+            postalCode: String(req.body.postalCode || '').trim(),
+            country: String(req.body.country || '').trim(),
+            phone: String(req.body.phone || '').trim(),
+        };
+        if (!profile.firstName || !profile.lastName || !profile.street || !profile.city || !profile.state || !profile.postalCode || !profile.country || !profile.phone) {
+            return res.status(400).json({ success: false, message: 'Please complete all profile details.' });
+        }
+        const user = await users.findByIdAndUpdate(req.user.id, { profile }, { new: true }).select('name email profile');
+        res.json({ success: true, profile: { ...user.profile, email: user.email } });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Unable to save profile.' });
+    }
+});
 
 // creating endpoint for adding products in cartdata
 app.post('/addtocart', fetchUser, async (req, res) => {

@@ -23,6 +23,17 @@ export default function Checkout() {
         phone: '',
     });
 
+    React.useEffect(() => {
+        const token = localStorage.getItem('auth-token');
+        if (!token) return;
+        fetch(apiUrl('/profile'), { headers: { 'auth-token': token } })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) setFormData((current) => ({ ...current, ...data.profile }));
+            })
+            .catch(() => {});
+    }, []);
+
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
@@ -130,8 +141,12 @@ export default function Checkout() {
     return (
         <main className="checkout">
             <div className="checkout-header">
-                <p>CHECKOUT</p>
+                <div className="checkout-header-top">
+                    <p>CHECKOUT</p>
+                    <span>STEP 2 OF 2</span>
+                </div>
                 <h1>Complete your order</h1>
+                <p className="checkout-header-copy">A few details, then we will get everything moving.</p>
             </div>
             {submitted ? (
                 <section className="checkout-success">
@@ -195,7 +210,7 @@ export default function Checkout() {
                             </label>
                             <label className="checkout-method">
                                 <input type="radio" name="paymentMethod" value="online" checked={paymentMethod === 'online'} onChange={(event) => setPaymentMethod(event.target.value)} />
-                                Online payment
+                                Razorpay
                             </label>
                         </fieldset>
                         {error && <p className="checkout-error">{error}</p>}
@@ -211,7 +226,7 @@ export default function Checkout() {
                         </div>
                         <div>
                             <span>Subtotal</span>
-                            <strong>${getDiscountedSelectedCartAmount().toFixed(2)}</strong>
+                            <strong>₹{getDiscountedSelectedCartAmount().toFixed(2)}</strong>
                         </div>
                         <div>
                             <span>Shipping</span>
@@ -220,7 +235,7 @@ export default function Checkout() {
                         <hr />
                         <div className="checkout-total">
                             <span>Total</span>
-                            <strong>${getDiscountedSelectedCartAmount().toFixed(2)}</strong>
+                            <strong>₹{getDiscountedSelectedCartAmount().toFixed(2)}</strong>
                         </div>
                     </aside>
                 </div>

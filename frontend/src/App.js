@@ -9,6 +9,7 @@ import Orders from './Pages/Orders';
 import Collection from './Pages/Collection';
 import InfoPage from './Pages/InfoPage';
 import ShopCategory from './Pages/ShopCategory';
+import Profile from './Pages/Profile';
 
 import LoginSignup from './Pages/LoginSignup';
 import Footer from './components/Footer/Footer';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<LoginSignup />} />
         </Routes>
         <Footer/>
