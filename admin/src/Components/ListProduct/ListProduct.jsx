@@ -1,7 +1,7 @@
 import React ,{ useEffect,useState } from 'react'
 import './ListProduct.css'
 import cross_icon from '../../Assets/cross_icon.png'
-import adminFetch, { apiUrl } from '../../utils/adminFetch'
+import adminFetch, { apiUrl, assetUrl } from '../../utils/adminFetch'
 
 const ListProduct = () => {
 
@@ -103,7 +103,7 @@ const ListProduct = () => {
         {loading ? <p>Loading products...</p> : allproducts.map((product,index)=>{
           return <React.Fragment key={product.id || index}>
           <div className="listproduct-format-main listproduct-format">
-              <img src={Array.isArray(product.image) ? product.image[0] : product.image} alt={product.name} className="listproduct-product-icon" />
+              <img src={assetUrl(Array.isArray(product.image) ? product.image[0] : product.image)} alt={product.name} className="listproduct-product-icon" />
               <p>{product.name}</p>
               <p>${product.old_price}</p>
               <p>${product.new_price}</p>
