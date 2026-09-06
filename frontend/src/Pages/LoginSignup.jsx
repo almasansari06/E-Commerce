@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
+import { apiUrl } from '../utils/api'
 
 export default function LoginSignup() {
 
@@ -24,7 +25,7 @@ const submitHandler = async (event) => {
 
   try {
     const endpoint = state === 'Login' ? '/login' : '/signup';
-    const response = await fetch(`http://localhost:4000${endpoint}`, {
+    const response = await fetch(apiUrl(endpoint), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),

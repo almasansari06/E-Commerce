@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { ShopContext } from '../../Context/ShopContext';
 import Item from '../Item/Item';
 import './ProductBrowser.css';
+import { apiUrl } from '../../utils/api';
 
 export default function ProductBrowser({ title = 'Shop all', category = '', showSidebar = false }) {
     const { all_product } = useContext(ShopContext);
@@ -14,7 +15,7 @@ export default function ProductBrowser({ title = 'Shop all', category = '', show
     const [sortBy, setSortBy] = useState('featured');
 
     useEffect(() => {
-        fetch('http://localhost:4000/product-types')
+        fetch(apiUrl('/product-types'))
             .then((response) => response.json())
             .then((data) => setProductTypes(Array.isArray(data) ? data : []))
             .catch(() => setProductTypes([]));

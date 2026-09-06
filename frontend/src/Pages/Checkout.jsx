@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../Context/ShopContext';
 import './CSS/Checkout.css';
+import { apiUrl } from '../utils/api';
 
 export default function Checkout() {
     const { getDiscountedSelectedCartAmount, getSelectedCartItems, all_product, cartItems, selectedCartItems, getCartSize, setCartItems, setCartSizes, setSelectedCartItems, setAppliedCoupon } = useContext(ShopContext);
@@ -45,7 +46,7 @@ export default function Checkout() {
         setIsSubmitting(true);
         setError('');
         try {
-            const response = await fetch('http://localhost:4000/orders', {
+            const response = await fetch(apiUrl('/orders'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

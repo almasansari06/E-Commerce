@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CSS/Orders.css';
+import { apiUrl } from '../utils/api';
 
 const orderStages = ['Order Placed', 'Packing', 'Shipped', 'Out for Delivery', 'Delivered'];
 const normalizeStatus = (status) => status === 'Processing' ? 'Order Placed' : status;
@@ -18,7 +19,7 @@ export default function Orders() {
             return;
         }
 
-        const loadOrders = () => fetch('http://localhost:4000/orders', {
+        const loadOrders = () => fetch(apiUrl('/orders'), {
             headers: { 'auth-token': token },
         })
             .then(async (response) => {

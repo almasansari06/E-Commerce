@@ -3,6 +3,7 @@ import './ProductDisplay.css'
 import star_icon from '../Assets/star_icon.png';
 import star_dull_icon from '../Assets/star_dull_icon.png';
 import { ShopContext } from '../../Context/ShopContext';
+import { apiUrl } from '../../utils/api';
 
 export default function ProductDisplay(props) {
     const{product} = props
@@ -36,7 +37,7 @@ export default function ProductDisplay(props) {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:4000/products/${product.id}/reviews`, {
+      const response = await fetch(apiUrl(`/products/${product.id}/reviews`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'auth-token': token },
         body: JSON.stringify({ rating: reviewRating, comment: reviewComment }),

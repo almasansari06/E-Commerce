@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './Login.css'
+import { apiUrl } from '../../utils/adminFetch'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -13,7 +14,7 @@ const Login = () => {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:4000/admin/login', {
+      const response = await fetch(apiUrl('/admin/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

@@ -1,5 +1,6 @@
 
 import React, { createContext, useEffect, useState, } from "react";
+import { apiUrl } from '../utils/api';
 
 export const ShopContext = createContext(null);
 
@@ -23,13 +24,13 @@ const ShopContextProvider = (props) => {
 
 
     useEffect(() => {
-        fetch("http://localhost:4000/allproducts")
+        fetch(apiUrl('/allproducts'))
         .then((response) => response.json())
         .then((data) => setAll_Product(data))
         .catch(() => setAll_Product([]));
 
         if(localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/getcart',{
+            fetch(apiUrl('/getcart'),{
                 method:'POST',
                 headers:{
                     Accept:'application/form-data',
@@ -52,7 +53,7 @@ const ShopContextProvider = (props) => {
         setSelectedCartItems((prev) => ({ ...prev, [itemsId]: true }));
         if (size) setCartSizes((prev) => ({ ...prev, [itemsId]: size }));
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/addtocart',{
+            fetch(apiUrl('/addtocart'),{
                 method:'Post',
                 headers:{
                     Accept:'application/form-data',
@@ -75,7 +76,7 @@ const ShopContextProvider = (props) => {
             return next;
         });
         if(localStorage.getItem('auth-token')){
-            fetch('http://localhost:4000/removefromcart',{
+            fetch(apiUrl('/removefromcart'),{
                 method:'Post',
                 headers:{
                     Accept:'application/form-data',
@@ -104,7 +105,7 @@ const ShopContextProvider = (props) => {
     };
 
     const applyCoupon = async (code) => {
-        const response = await fetch('http://localhost:4000/coupons/validate', {
+        const response = await fetch(apiUrl('/coupons/validate'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code }),
