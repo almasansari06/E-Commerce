@@ -25,6 +25,7 @@ const allowedOrigins = [
     'https://e-commerce-backend-blond-five.vercel.app',
     'https://e-commerce-admin-xi-eight.vercel.app',
     'https://e-commerce-backend-theta-eight.vercel.app',
+    'https://shopper-dev-ecommerce.vercel.app',
 ];
 
 app.use(express.json());
