@@ -13,8 +13,39 @@ const cors =require("cors");
 const { log } = require("console");
 const { type } = require("os");
 
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://e-commerce-rhat.vercel.app',
+    'https://e-commerce-admin-xi-eight.vercel.app',
+    'https://e-commerce-backend-theta-eight.vercel.app',
+];
+
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+        callback(new Error('CORS policy does not allow this origin.'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'],
+}));
+app.options('*', cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+        callback(new Error('CORS policy does not allow this origin.'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'],
+}));
 
 const adminEmail = process.env.ADMIN_EMAIL;
 let adminPassword = process.env.ADMIN_PASSWORD;
