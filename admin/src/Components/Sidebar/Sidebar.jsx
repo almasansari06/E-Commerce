@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './Sidebar.css'
 import { NavLink } from 'react-router-dom'
 import add_product from '../../Assets/Product_Cart.svg'
-import list_product_icon from '../../Assets/Product_List_icon.svg'
+import list_product_icon from '../../Assets/Product_list_icon.svg'
 
 const Sidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
