@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Orders.css';
 import adminFetch from '../../utils/adminFetch';
+import { apiUrl } from '../../utils/adminFetch';
 
 const statuses = ['Order Placed', 'Packing', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'];
 const normalizeStatus = (status) => status === 'Processing' ? 'Order Placed' : status;
@@ -13,7 +14,7 @@ const Orders = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const response = await adminFetch('http://localhost:4000/admin/orders');
+      const response = await adminFetch(apiUrl('/admin/orders'));
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data.message || 'Unable to load orders.');
       setOrders(data.orders);
@@ -30,7 +31,7 @@ const Orders = () => {
   }, []);
 
   const updateStatus = async (orderId, status) => {
-    const response = await adminFetch(`http://localhost:4000/admin/orders/${orderId}/status`, {
+    const response = await adminFetch(apiUrl(`/admin/orders/${orderId}/status`), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),

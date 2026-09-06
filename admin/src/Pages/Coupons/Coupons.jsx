@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../Users/Management.css';
 import adminFetch from '../../utils/adminFetch';
+import { apiUrl } from '../../utils/adminFetch';
 
 export default function Coupons() {
   const [coupons, setCoupons] = useState([]);
@@ -9,7 +10,7 @@ export default function Coupons() {
   const [error, setError] = useState('');
 
   const loadCoupons = async () => {
-    const response = await adminFetch('http://localhost:4000/admin/coupons');
+    const response = await adminFetch(apiUrl('/admin/coupons'));
     const data = await response.json();
     if (!response.ok || !data.success) throw new Error(data.message || 'Unable to load coupons.');
     setCoupons(data.coupons);
@@ -18,21 +19,21 @@ export default function Coupons() {
 
   const addCoupon = async (event) => {
     event.preventDefault();
-    const response = await adminFetch('http://localhost:4000/admin/coupons', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, discountPercentage: discount }) });
+    const response = await adminFetch(apiUrl('/admin/coupons'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, discountPercentage: discount }) });
     const data = await response.json();
     if (!response.ok || !data.success) { setError(data.message || 'Unable to create coupon.'); return; }
     setCoupons((current) => [data.coupon, ...current]); setCode('');
   };
 
   const toggleCoupon = async (coupon) => {
-    const response = await adminFetch(`http://localhost:4000/admin/coupons/${coupon._id}/toggle`, { method: 'PATCH' });
+    const response = await adminFetch(apiUrl(`/admin/coupons/${coupon._id}/toggle`), { method: 'PATCH' });
     const data = await response.json();
     if (data.success) setCoupons((current) => current.map((item) => item._id === coupon._id ? data.coupon : item));
   };
 
   const deleteCoupon = async (id) => {
     if (!window.confirm('Delete this coupon?')) return;
-    const response = await adminFetch(`http://localhost:4000/admin/coupons/${id}`, { method: 'DELETE' });
+    const response = await adminFetch(apiUrl(`/admin/coupons/${id}`), { method: 'DELETE' });
     if (response.ok) setCoupons((current) => current.filter((coupon) => coupon._id !== id));
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../Users/Management.css';
 import adminFetch from '../../utils/adminFetch';
+import { apiUrl } from '../../utils/adminFetch';
 
 export default function Shuffle() {
   const [message, setMessage] = useState('');
@@ -9,7 +10,7 @@ export default function Shuffle() {
     if (!window.confirm('Shuffle product display order?')) return;
     setLoading(true); setMessage('');
     try {
-      const response = await adminFetch('http://localhost:4000/admin/shuffle', { method: 'POST' });
+      const response = await adminFetch(apiUrl('/admin/shuffle'), { method: 'POST' });
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data.message || 'Unable to shuffle products.');
       setMessage(data.message);

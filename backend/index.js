@@ -36,7 +36,7 @@ app.use(cors({
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'auth-token', 'admin-token'],
 }));
 app.options('*', cors({
     origin: (origin, callback) => {
@@ -48,7 +48,7 @@ app.options('*', cors({
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'auth-token', 'admin-token'],
 }));
 
 const adminEmail = process.env.ADMIN_EMAIL;

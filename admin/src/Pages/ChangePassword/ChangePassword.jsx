@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ChangePassword.css'
 import adminFetch from '../../utils/adminFetch'
+import { apiUrl } from '../../utils/adminFetch'
 
 const ChangePassword = () => {
   const navigate = useNavigate()
@@ -19,7 +20,7 @@ const ChangePassword = () => {
     setSaving(true)
 
     try {
-      const response = await adminFetch('http://localhost:4000/admin/password', {
+      const response = await adminFetch(apiUrl('/admin/password'), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currentPassword: form.currentPassword, newPassword: form.newPassword }),

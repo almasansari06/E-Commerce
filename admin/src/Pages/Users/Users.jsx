@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './Management.css';
 import adminFetch from '../../utils/adminFetch';
+import { apiUrl } from '../../utils/adminFetch';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
 
   const loadUsers = async () => {
-    const response = await adminFetch('http://localhost:4000/admin/users');
+    const response = await adminFetch(apiUrl('/admin/users'));
     const data = await response.json();
     if (!response.ok || !data.success) throw new Error(data.message || 'Unable to load users.');
     setUsers(data.users);
@@ -17,7 +18,7 @@ export default function Users() {
 
   const toggleStatus = async (user) => {
     const status = user.status === 'disabled' ? 'active' : 'disabled';
-    const response = await adminFetch(`http://localhost:4000/admin/users/${user._id}/status`, {
+    const response = await adminFetch(apiUrl(`/admin/users/${user._id}/status`), {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }),
     });
     const data = await response.json();
@@ -26,7 +27,7 @@ export default function Users() {
 
   const deleteUser = async (id) => {
     if (!window.confirm('Delete this user?')) return;
-    const response = await adminFetch(`http://localhost:4000/admin/users/${id}`, { method: 'DELETE' });
+    const response = await adminFetch(apiUrl(`/admin/users/${id}`), { method: 'DELETE' });
     if (response.ok) setUsers((current) => current.filter((user) => user._id !== id));
   };
 
