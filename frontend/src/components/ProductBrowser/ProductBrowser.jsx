@@ -15,11 +15,12 @@ export default function ProductBrowser({ title = 'Shop all', category = '', show
     const [sortBy, setSortBy] = useState('featured');
 
     useEffect(() => {
+        if (!showSidebar) return;
         fetch(apiUrl('/product-types'))
             .then((response) => response.json())
             .then((data) => setProductTypes(Array.isArray(data) ? data : []))
             .catch(() => setProductTypes([]));
-    }, []);
+    }, [showSidebar]);
 
     const availableProductTypes = [...new Set([
         ...productTypes.map((type) => type.name),
