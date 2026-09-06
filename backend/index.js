@@ -55,17 +55,18 @@ const adminAuth = (req, res, next) => {
 };
 
 // Image Storage Engine
-const diskStorage = multer.diskStorage({
-    destination: './upload/images',
-    filename: (req, file, cb) => cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`),
-});
 const isServerlessRuntime = Boolean(
     process.env.VERCEL ||
     process.env.VERCEL_ENV ||
     process.env.NOW_REGION ||
     process.cwd().startsWith('/var/task'),
 );
-const storage = isServerlessRuntime ? multer.memoryStorage() : diskStorage;
+const storage = isServerlessRuntime
+    ? multer.memoryStorage()
+    : multer.diskStorage({
+        destination: './upload/images',
+        filename: (req, file, cb) => cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`),
+    });
 
 
 
