@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './DescriptionBox.css'
-
+import { apiUrl } from '../../utils/api'
 
 export default function DescriptionBox({ product }) {
   const reviews = Array.isArray(product?.reviews) ? product.reviews : [];
@@ -11,7 +11,7 @@ export default function DescriptionBox({ product }) {
   const showReviews = async () => {
     setActiveTab('reviews');
     try {
-      const response = await fetch('http://localhost:4000/allproducts');
+      const response = await fetch(apiUrl('/allproducts'));
       const products = await response.json();
       const currentProduct = products.find((item) => item.id === product.id);
       setLatestReviews(Array.isArray(currentProduct?.reviews) ? currentProduct.reviews : []);

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './Dashboard.css';
-import adminFetch from '../../utils/adminFetch';
+import adminFetch, { apiUrl } from '../../utils/adminFetch';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ products: 0, orders: 0, users: 0 });
 
   useEffect(() => {
     Promise.all([
-      adminFetch('http://localhost:4000/allproducts').then((response) => response.json()),
-      adminFetch('http://localhost:4000/admin/orders').then((response) => response.json()),
-      adminFetch('http://localhost:4000/admin/users').then((response) => response.json()),
+      adminFetch(apiUrl('/allproducts')).then((response) => response.json()),
+      adminFetch(apiUrl('/admin/orders')).then((response) => response.json()),
+      adminFetch(apiUrl('/admin/users')).then((response) => response.json()),
     ]).then(([products, orders, users]) => {
       setStats({ products: Array.isArray(products) ? products.length : 0, orders: orders.orders?.length || 0, users: users.users?.length || 0 });
     }).catch(() => {});

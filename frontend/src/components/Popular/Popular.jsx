@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './Popular.css'
 import Item from '../Item/Item'
+import { apiUrl } from '../../utils/api'
 
 export default function Popular() {
   const [popularProducts, setPopularProducts] = useState([]); // Changed from React.useState to useState
 
   useEffect(() => {
-    fetch('http://localhost:4000/popularinwomen')
+    fetch(apiUrl('/popularinwomen'))
       .then((response) => response.json())
       .then((data) => setPopularProducts(data));
   }, []);

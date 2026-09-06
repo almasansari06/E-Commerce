@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import './AddProduct.css'
 import upload_area from '../../Assets/upload_area.svg'
-import adminFetch from '../../utils/adminFetch'
+import adminFetch, { apiUrl } from '../../utils/adminFetch'
+
+const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = () => reject(new Error('Unable to read the selected image.'));
+  reader.readAsDataURL(file);
+});
 
 const AddProduct = () => {
 
@@ -31,7 +38,7 @@ const AddProduct = () => {
     }
 
     useEffect(() => {
-      adminFetch('http://localhost:4000/admin/product-types').then((response) => response.json()).then((data) => {
+      adminFetch(apiUrl('/admin/product-types')).then((response) => response.json()).then((data) => {
         if (data.success) setProductTypes(data.productTypes || []);
       }).catch(() => {});
     }, []);
@@ -39,7 +46,7 @@ const AddProduct = () => {
     const addProductType = async () => {
       const name = newProductType.trim();
       if (!name) return;
-      const response = await adminFetch('http://localhost:4000/admin/product-types', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
+      const response = await adminFetch(apiUrl('/admin/product-types'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
       const data = await response.json();
       if (!response.ok || !data.success) { setMessage(data.message || 'Unable to add product type.'); return; }
       setProductTypes((current) => [...current, data.productType]);
@@ -51,7 +58,7 @@ const AddProduct = () => {
     const editProductType = async (productType) => {
       const name = window.prompt('Edit product type', productType.name)?.trim();
       if (!name || name === productType.name) return;
-      const response = await adminFetch(`http://localhost:4000/admin/product-types/${productType._id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
+      const response = await adminFetch(`${apiUrl('/admin/product-types')}/${productType._id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name }) });
       const data = await response.json();
       if (data.success) {
         setProductTypes((current) => current.map((item) => item._id === productType._id ? data.productType : item));
@@ -61,7 +68,7 @@ const AddProduct = () => {
 
     const deleteProductType = async (productType) => {
       if (!window.confirm(`Delete product type "${productType.name}"?`)) return;
-      const response = await adminFetch(`http://localhost:4000/admin/product-types/${productType._id}`, { method: 'DELETE' });
+      const response = await adminFetch(`${apiUrl('/admin/product-types')}/${productType._id}`, { method: 'DELETE' });
       if (response.ok) {
         setProductTypes((current) => current.filter((item) => item._id !== productType._id));
         if (managedProductTypeId === productType._id) setManagedProductTypeId('');
@@ -69,54 +76,47 @@ const AddProduct = () => {
       }
     };
 
-    const Add_Product =async(event)=>{
+    const Add_Product = async (event) => {
       event.preventDefault();
       if (images.length === 0) {
         setMessage('Please select at least one product image.');
         return;
       }
+
       setIsSubmitting(true);
       setMessage('');
-      let responseData;
-      let product = { ...productDetails };
 
-      let formData = new FormData();
-      images.forEach((image) => formData.append('products', image));
+      try {
+        const imageData = await Promise.all(images.map(readFileAsDataUrl));
+        const product = {
+          ...productDetails,
+          image: imageData,
+          availableSizes: Array.isArray(productDetails.availableSizes) ? productDetails.availableSizes : [],
+        };
 
-      await fetch('http://localhost:4000/upload',{
-        method:'POST',
-        headers:{
-          Accept:'application/json',
-        },
-        body:formData,
-      }).then((resp)=>resp.json()).then((data)=>{responseData = data});
-      
-      if(responseData.success)
-      {
-        product.image = responseData.image_urls || [responseData.image_url];
-        console.log(product);
-
-        await fetch('http://localhost:4000/addproduct',{
-          method:'POST',
-          headers:{
-            Accept:'application/json',
-            'content-Type':'application/json',
+        const response = await fetch(apiUrl('/addproduct'), {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
-          body:JSON.stringify(product),
-        }).then((resp)=>resp.json()).then((data)=>{
-          if (data.success) {
-            setMessage('Product added successfully.');
-            setProductDetails({ name: '', description: '', productType: '', category: 'women', new_price: '', old_price: '', availableSizes: [], isNewCollection: false });
-            setImages([]);
-          } else {
-            setMessage(data.message || 'Unable to add product.');
-          }
+          body: JSON.stringify(product),
         });
-      } else {
-        setMessage(responseData.message || 'Image upload failed.');
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Unable to add product.');
+        }
+
+        setMessage('Product added successfully.');
+        setProductDetails({ name: '', description: '', productType: '', category: 'women', new_price: '', old_price: '', availableSizes: [], isNewCollection: false });
+        setImages([]);
+      } catch (error) {
+        setMessage(error.message || 'Unable to add product.');
+      } finally {
+        setIsSubmitting(false);
       }
-      setIsSubmitting(false);
-    }
+    };
 
   return (
     <form className='add-product' onSubmit={Add_Product}>

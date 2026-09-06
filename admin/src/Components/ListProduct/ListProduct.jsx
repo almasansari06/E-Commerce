@@ -1,7 +1,7 @@
 import React ,{ useEffect,useState } from 'react'
 import './ListProduct.css'
 import cross_icon from '../../Assets/cross_icon.png'
-import adminFetch from '../../utils/adminFetch'
+import adminFetch, { apiUrl } from '../../utils/adminFetch'
 
 const ListProduct = () => {
 
@@ -14,7 +14,7 @@ const ListProduct = () => {
   const fetchInfo = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:4000/allproducts');
+      const response = await fetch(apiUrl('/allproducts'));
       const data = await response.json();
       if (!response.ok || !Array.isArray(data)) throw new Error(data.message || 'Unable to load products.');
       setAllProducts(data);
@@ -28,14 +28,14 @@ const ListProduct = () => {
 
   useEffect(() => {
     fetchInfo();
-    adminFetch('http://localhost:4000/admin/product-types').then((response) => response.json()).then((data) => {
+    adminFetch(apiUrl('/admin/product-types')).then((response) => response.json()).then((data) => {
       if (data.success) setProductTypes(data.productTypes || []);
     }).catch(() => {});
   },[])
 
     const remove_product = async (id) => {
       if (!window.confirm('Remove this product?')) return;
-      await fetch('http://localhost:4000/removeproduct',{
+      await fetch(apiUrl('/removeproduct'),{
         method: 'POST',
         headers: {
           Accept:'application/json',
@@ -49,7 +49,7 @@ const ListProduct = () => {
 
     const saveProduct = async (event) => {
       event.preventDefault();
-      const response = await fetch('http://localhost:4000/updateproduct', {
+      const response = await fetch(apiUrl('/updateproduct'), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editingProduct),
