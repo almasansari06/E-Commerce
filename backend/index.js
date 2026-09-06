@@ -757,7 +757,7 @@ app.delete('/admin/product-types/:typeId', async (req, res) => {
     }
 });
 
-if (process.env.NODE_ENV !== 'production') {
+if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
     app.listen(port, (error) => {
         if (!error) console.log("Server Running on Port " + port);
         else console.log("Error :" + error);
