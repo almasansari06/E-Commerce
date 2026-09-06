@@ -21,8 +21,12 @@ let adminPassword = process.env.ADMIN_PASSWORD;
 const adminJwtSecret = process.env.ADMIN_JWT_SECRET || 'shopper_admin_secret';
 
 // Database Connection With MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-    .catch((error) => console.error("MongoDB connection failed:", error.message));
+if (process.env.MONGODB_URI) {
+    mongoose.connect(process.env.MONGODB_URI)
+        .catch((error) => console.error("MongoDB connection failed:", error.message));
+} else {
+    console.error('MONGODB_URI is not configured. Database routes will return an unavailable response.');
+}
 
 // API Creation
 
