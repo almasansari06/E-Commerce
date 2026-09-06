@@ -17,6 +17,8 @@ const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5173',
     'https://e-commerce-rhat.vercel.app',
+    'https://e-commerce-va6q.vercel.app',
+    'https://e-commerce-eta-three-47.vercel.app',
     'https://e-commerce-admin-xi-eight.vercel.app',
     'https://e-commerce-backend-theta-eight.vercel.app',
 ];
