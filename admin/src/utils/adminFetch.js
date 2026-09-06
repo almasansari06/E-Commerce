@@ -4,6 +4,8 @@ export const apiUrl = (path = '/') => {
   return `${baseUrl.replace(/\/$/, '')}${normalizedPath}`;
 };
 
+export const assetUrl = (value = '') => value.replace('http://localhost:4000', import.meta.env.VITE_API_URL || 'http://localhost:4000');
+
 export default function adminFetch(url, options = {}) {
   const headers = new Headers(options.headers || {});
   const token = localStorage.getItem('admin-token');

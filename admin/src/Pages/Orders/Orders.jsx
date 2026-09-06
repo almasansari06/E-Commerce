@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Orders.css';
-import adminFetch from '../../utils/adminFetch';
-import { apiUrl } from '../../utils/adminFetch';
+import adminFetch, { apiUrl, assetUrl } from '../../utils/adminFetch';
 
 const statuses = ['Order Placed', 'Packing', 'Shipped', 'Out for Delivery', 'Delivered', 'Cancelled'];
 const normalizeStatus = (status) => status === 'Processing' ? 'Order Placed' : status;
@@ -62,7 +61,7 @@ const Orders = () => {
                 <p className="admin-order-id">#{order._id.slice(-8).toUpperCase()}</p>
                 <h2>{order.address?.firstName} {order.address?.lastName}</h2>
                 <p>{order.address?.email} · {new Date(order.date).toLocaleDateString()}</p>
-                <div className="admin-order-items">{order.items.map((item, index) => { const image = Array.isArray(item.image) ? item.image[0] : item.image; return <div className="admin-order-item" key={`${item.id}-${index}`}><img src={image} alt={item.name} /><span><strong>{item.name}</strong><small>Size: {item.size || 'Not specified'} · Qty: {item.quantity || 1}</small></span></div>; })}</div>
+                <div className="admin-order-items">{order.items.map((item, index) => { const image = Array.isArray(item.image) ? item.image[0] : item.image; return <div className="admin-order-item" key={`${item.id}-${index}`}><img src={assetUrl(image)} alt={item.name} /><span><strong>{item.name}</strong><small>Size: {item.size || 'Not specified'} · Qty: {item.quantity || 1}</small></span></div>; })}</div>
               </div>
               <div className="admin-order-meta">
                 <strong>${order.amount}</strong>

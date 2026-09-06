@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CSS/Orders.css';
-import { apiUrl } from '../utils/api';
+import { apiUrl, assetUrl } from '../utils/api';
 
 const orderStages = ['Order Placed', 'Packing', 'Shipped', 'Out for Delivery', 'Delivered'];
 const normalizeStatus = (status) => status === 'Processing' ? 'Order Placed' : status;
@@ -72,7 +72,7 @@ export default function Orders() {
                         <div className="order-items">
                             {order.items.map((item, index) => {
                                 const image = Array.isArray(item.image) ? item.image[0] : item.image;
-                                return <div className="order-item" key={`${item.id}-${index}`}><img src={image} alt={item.name} /><div><strong>{item.name}</strong><span>Size: {item.size || 'Not specified'}</span><span>Quantity: {item.quantity || 1}</span></div></div>;
+                                return <div className="order-item" key={`${item.id}-${index}`}><img src={assetUrl(image)} alt={item.name} /><div><strong>{item.name}</strong><span>Size: {item.size || 'Not specified'}</span><span>Quantity: {item.quantity || 1}</span></div></div>;
                             })}
                         </div>
                         <div className="order-card-details">
