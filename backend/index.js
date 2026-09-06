@@ -7,6 +7,8 @@ const app = express();
 const mongoose = require("mongoose");
 mongoose.set('bufferCommands', false);
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
+const Razorpay = require('razorpay');
 const multer = require("multer");
 const path = require("path");
 const cors =require("cors");
@@ -54,6 +56,9 @@ app.options('*', cors({
 const adminEmail = process.env.ADMIN_EMAIL;
 let adminPassword = process.env.ADMIN_PASSWORD;
 const adminJwtSecret = process.env.ADMIN_JWT_SECRET || 'shopper_admin_secret';
+const razorpay = process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET
+    ? new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET })
+    : null;
 
 // Database Connection With MongoDB
 let databaseConnectionPromise;
@@ -574,6 +579,54 @@ app.post('/products/:productId/reviews', fetchUser, async (req, res) => {
 });
 
 // Create and retrieve authenticated customer orders
+const createCustomerOrder = async (userId, { items, amount, address, paymentMethod }) => {
+    const order = await Order.create({
+        userId,
+        items,
+        amount,
+        address,
+        paymentMethod: paymentMethod || 'cod',
+    });
+
+    const userData = await users.findById(userId).select('cartData');
+    const updatedCart = { ...(userData?.cartData || {}) };
+    items.forEach((item) => {
+        if (item.id !== undefined) updatedCart[item.id] = 0;
+    });
+    await users.findByIdAndUpdate(userId, { cartData: updatedCart });
+    return order;
+};
+
+app.post('/payment/create-order', fetchUser, async (req, res) => {
+    if (!razorpay) return res.status(503).json({ success: false, message: 'Razorpay is not configured.' });
+    const amount = Number(req.body.amount);
+    if (!Number.isFinite(amount) || amount <= 0) return res.status(400).json({ success: false, message: 'Invalid payment amount.' });
+    try {
+        const paymentOrder = await razorpay.orders.create({ amount: Math.round(amount * 100), currency: 'INR', receipt: `receipt_${Date.now()}` });
+        res.json({ success: true, order: paymentOrder, keyId: process.env.RAZORPAY_KEY_ID });
+    } catch (error) {
+        console.error('Razorpay order creation failed:', error.message);
+        res.status(500).json({ success: false, message: 'Unable to start online payment.' });
+    }
+});
+
+app.post('/payment/verify', fetchUser, async (req, res) => {
+    if (!razorpay) return res.status(503).json({ success: false, message: 'Razorpay is not configured.' });
+    if (!isDatabaseConnected()) return res.status(503).json({ success: false, message: 'Database is unavailable.' });
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderData } = req.body;
+    const expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+        .digest('hex');
+    if (expectedSignature !== razorpay_signature) return res.status(400).json({ success: false, message: 'Payment verification failed.' });
+    try {
+        const order = await createCustomerOrder(req.user.id, { ...orderData, paymentMethod: 'razorpay' });
+        res.status(201).json({ success: true, order });
+    } catch (error) {
+        console.error('Paid order creation failed:', error.message);
+        res.status(500).json({ success: false, message: 'Payment succeeded but order could not be saved.' });
+    }
+});
+
 app.post('/orders', fetchUser, async (req, res) => {
     if (!isDatabaseConnected()) {
         return res.status(503).json({ success: false, message: 'Database is unavailable.' });
@@ -585,20 +638,8 @@ app.post('/orders', fetchUser, async (req, res) => {
             return res.status(400).json({ success: false, message: 'Order details are incomplete.' });
         }
 
-        const order = await Order.create({
-            userId: req.user.id,
-            items,
-            amount,
-            address,
-            paymentMethod: paymentMethod || 'cod',
-        });
-
-        const userData = await users.findById(req.user.id).select('cartData');
-        const updatedCart = { ...(userData?.cartData || {}) };
-        items.forEach((item) => {
-            if (item.id !== undefined) updatedCart[item.id] = 0;
-        });
-        await users.findByIdAndUpdate(req.user.id, { cartData: updatedCart });
+        if (paymentMethod === 'online') return res.status(400).json({ success: false, message: 'Complete Razorpay payment before placing the order.' });
+        const order = await createCustomerOrder(req.user.id, { items, amount, address, paymentMethod });
 
         res.status(201).json({ success: true, order });
     } catch (error) {

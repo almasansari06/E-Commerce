@@ -27,6 +27,38 @@ export default function Checkout() {
         setFormData({ ...formData, [event.target.name]: event.target.value });
     };
 
+    const openRazorpay = (paymentOrder, keyId, orderData, token) => new Promise((resolve, reject) => {
+        if (!window.Razorpay) {
+            reject(new Error('Razorpay checkout could not load.'));
+            return;
+        }
+        const checkout = new window.Razorpay({
+            key: keyId,
+            amount: paymentOrder.amount,
+            currency: paymentOrder.currency,
+            name: 'Shopper',
+            description: 'Shopper order payment',
+            order_id: paymentOrder.id,
+            prefill: { name: `${formData.firstName} ${formData.lastName}`, email: formData.email, contact: formData.phone },
+            handler: async (response) => {
+                try {
+                    const verification = await fetch(apiUrl('/payment/verify'), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'auth-token': token },
+                        body: JSON.stringify({ ...response, orderData }),
+                    });
+                    const data = await verification.json();
+                    if (!verification.ok || !data.success) throw new Error(data.message || 'Payment verification failed.');
+                    resolve(data);
+                } catch (verificationError) {
+                    reject(verificationError);
+                }
+            },
+            modal: { ondismiss: () => reject(new Error('Payment was cancelled.')) },
+        });
+        checkout.open();
+    });
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('auth-token');
@@ -46,22 +78,32 @@ export default function Checkout() {
         setIsSubmitting(true);
         setError('');
         try {
-            const response = await fetch(apiUrl('/orders'), {
+            const orderData = {
+                items,
+                amount: getDiscountedSelectedCartAmount(),
+                address: formData,
+                paymentMethod,
+            };
+            if (paymentMethod === 'online') {
+                const paymentResponse = await fetch(apiUrl('/payment/create-order'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'auth-token': token },
+                    body: JSON.stringify({ amount: orderData.amount }),
+                });
+                const paymentData = await paymentResponse.json();
+                if (!paymentResponse.ok || !paymentData.success) throw new Error(paymentData.message || 'Unable to start online payment.');
+                await openRazorpay(paymentData.order, paymentData.keyId, orderData, token);
+            } else {
+                const response = await fetch(apiUrl('/orders'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'auth-token': token,
                 },
-                body: JSON.stringify({
-                    items,
-                    amount: getDiscountedSelectedCartAmount(),
-                    address: formData,
-                    paymentMethod,
-                }),
-            });
-            const data = await response.json();
-            if (!response.ok || !data.success) {
-                throw new Error(data.message || 'Unable to place order.');
+                body: JSON.stringify(orderData),
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success) throw new Error(data.message || 'Unable to place order.');
             }
             setCartItems((current) => Object.keys(current).reduce((nextCart, itemId) => ({ ...nextCart, [itemId]: selectedCartItems[itemId] ? 0 : current[itemId] }), {}));
             setSelectedCartItems((current) => Object.keys(current).reduce((nextSelection, itemId) => ({ ...nextSelection, [itemId]: selectedCartItems[itemId] ? false : current[itemId] }), {}));
