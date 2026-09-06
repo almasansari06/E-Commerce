@@ -56,12 +56,24 @@ let adminPassword = process.env.ADMIN_PASSWORD;
 const adminJwtSecret = process.env.ADMIN_JWT_SECRET || 'shopper_admin_secret';
 
 // Database Connection With MongoDB
-if (process.env.MONGODB_URI) {
-    mongoose.connect(process.env.MONGODB_URI)
-        .catch((error) => console.error("MongoDB connection failed:", error.message));
-} else {
-    console.error('MONGODB_URI is not configured. Database routes will return an unavailable response.');
-}
+let databaseConnectionPromise;
+const connectToDatabase = () => {
+    if (!process.env.MONGODB_URI) {
+        console.error('MONGODB_URI is not configured. Database routes will return an unavailable response.');
+        return Promise.resolve();
+    }
+    if (mongoose.connection.readyState === 1) return Promise.resolve();
+    if (!databaseConnectionPromise) {
+        databaseConnectionPromise = mongoose.connect(process.env.MONGODB_URI)
+            .catch((error) => {
+                databaseConnectionPromise = null;
+                console.error("MongoDB connection failed:", error.message);
+            });
+    }
+    return databaseConnectionPromise;
+};
+
+connectToDatabase();
 
 // API Creation
 
@@ -190,6 +202,11 @@ const Product = mongoose.model("product",{
 })
 
 const isDatabaseConnected = () => mongoose.connection.readyState === 1;
+
+app.use(async (req, res, next) => {
+    await connectToDatabase();
+    next();
+});
 
 app.post("/addproduct", async(req,res) => {
     if (!isDatabaseConnected()) {
