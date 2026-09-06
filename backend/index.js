@@ -55,12 +55,11 @@ const adminAuth = (req, res, next) => {
 };
 
 // Image Storage Engine
-const storage =multer.diskStorage({
-    destination:'./upload/images',
-    filename:(req,file,cb)=>{
-        return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
-    }
-})
+const diskStorage = multer.diskStorage({
+    destination: './upload/images',
+    filename: (req, file, cb) => cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`),
+});
+const storage = process.env.VERCEL ? multer.memoryStorage() : diskStorage;
 
 
 
@@ -71,6 +70,9 @@ app.use('/images',express.static('upload/images'))
 app.post("/upload",upload.array('products', 10),(req,res)=>{
     if (!req.files || req.files.length === 0) {
         return res.status(400).json({ success: false, message: 'At least one image is required.' });
+    }
+    if (process.env.VERCEL) {
+        return res.status(501).json({ success: false, message: 'Image storage needs Cloudinary or S3 configuration on Vercel.' });
     }
     res.json({
         success:1,
