@@ -93,7 +93,10 @@ const ShopContextProvider = (props) => {
 
     const getCartSize = (itemsId) => cartSizes[itemsId] || '';
     const toggleCartSelection = (itemsId) => setSelectedCartItems((prev) => ({ ...prev, [itemsId]: !prev[itemsId] }));
-    const getSelectedCartItems = () => Object.keys(cartItems).reduce((total, itemId) => total + (cartItems[itemId] > 0 && selectedCartItems[itemId] ? cartItems[itemId] : 0), 0);
+    const getSelectedCartItems = () => Object.keys(cartItems).reduce((total, itemId) => {
+        const productExists = all_product.some((product) => product.id === Number(itemId));
+        return total + (productExists && cartItems[itemId] > 0 && selectedCartItems[itemId] ? cartItems[itemId] : 0);
+    }, 0);
     const getSelectedCartAmount = () => Object.keys(cartItems).reduce((total, itemId) => {
         if (cartItems[itemId] <= 0 || !selectedCartItems[itemId]) return total;
         const product = all_product.find((item) => item.id === Number(itemId));
