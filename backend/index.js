@@ -757,11 +757,11 @@ app.delete('/admin/product-types/:typeId', async (req, res) => {
     }
 });
 
-app.listen(port,(error)=>{
-    if(!error){
-        console.log("Server Running on Port "+port)
-    }
-    else{
-        console.log("Error :"+error);
-    }
-})
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, (error) => {
+        if (!error) console.log("Server Running on Port " + port);
+        else console.log("Error :" + error);
+    });
+}
+
+module.exports = app;
