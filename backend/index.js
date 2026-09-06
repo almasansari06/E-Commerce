@@ -59,7 +59,13 @@ const diskStorage = multer.diskStorage({
     destination: './upload/images',
     filename: (req, file, cb) => cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`),
 });
-const storage = process.env.VERCEL ? multer.memoryStorage() : diskStorage;
+const isServerlessRuntime = Boolean(
+    process.env.VERCEL ||
+    process.env.VERCEL_ENV ||
+    process.env.NOW_REGION ||
+    process.cwd().startsWith('/var/task'),
+);
+const storage = isServerlessRuntime ? multer.memoryStorage() : diskStorage;
 
 
 
@@ -71,7 +77,7 @@ app.post("/upload",upload.array('products', 10),(req,res)=>{
     if (!req.files || req.files.length === 0) {
         return res.status(400).json({ success: false, message: 'At least one image is required.' });
     }
-    if (process.env.VERCEL) {
+    if (isServerlessRuntime) {
         return res.status(501).json({ success: false, message: 'Image storage needs Cloudinary or S3 configuration on Vercel.' });
     }
     res.json({
