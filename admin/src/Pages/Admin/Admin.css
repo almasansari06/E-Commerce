@@ -1,10 +1,11 @@
 .admin{
     display: flex;
-    background: rgb(240, 237, 237);
-    
+    min-height: calc(100vh - 91px);
+    background: #f5f6fa;
 }
 @media(max-width:800px){
     .admin{
         flex-direction: column;
+        min-height: auto;
     }
 }

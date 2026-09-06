@@ -1,44 +1,57 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import'./Navbar.css'
 import logo from '../Assets/logo.png'
 import cart_icon from '../Assets/cart_icon.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
-import nav_dropdown from '../Assets/nav_dropdown.png'
 export default function Navbar() {
 
-    const[menu,setMenu]=useState("shop");
+    const[menu,setMenu]=useState("");
     const {getTotalCartItems}=useContext(ShopContext);
-    const menuRef =useRef();
+    const navigate = useNavigate();
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [search, setSearch] = useState('');
+    const [accountOpen, setAccountOpen] = useState(false);
+    const isAuthenticated = Boolean(localStorage.getItem('auth-token'));
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
 
+    const submitSearch = (event) => {
+        event.preventDefault();
+        navigate(`/collection${search.trim() ? `?search=${encodeURIComponent(search.trim())}` : ''}`);
+        setSearchOpen(false);
+    };
+
   return (
     <div className='navbar'>
-        <div className="nav-logo">
-            <img src={logo} alt= ""/>
+        <Link className="nav-logo" to="/" aria-label="Shopper home">
+            <img src={logo} alt= "Shopper"/>
             <p>SHOPPER</p>
-        </div>
-        <img className= 'nav-dropdown' onClick={toggleMenu} src={nav_dropdown} alt="menu" />
-        <ul ref={menuRef} className={`nav-menu ${menuOpen ? 'active' : ''}`}>
-            <li onClick={()=>{setMenu("shop")}}><Link style={{textDecoration:'none'}} to='/'>Shop</Link>{menu==="shop"?<hr/>:<></>}</li>
-            <li onClick={()=>{setMenu("mens")}}><Link style={{textDecoration:'none'}}  to='/mens'>Men</Link>{menu==="mens"?<hr/>:<></>}</li>
-            <li onClick={()=>{setMenu("womens")}}><Link style={{textDecoration:'none'}}  to='/womens'>Women</Link>{menu==="womens"?<hr/>:<></>}</li>
-            <li onClick={()=>{setMenu("kids")}}><Link style={{textDecoration:'none'}}  to='/kids'>Kids</Link>{menu==="kids"?<hr/>:<></>}</li>
+        </Link>
+        <button className="nav-menu-toggle" type="button" onClick={toggleMenu} aria-label="Open navigation menu" aria-expanded={menuOpen}><span></span><span></span><span></span></button>
+        <ul className={`nav-menu ${menuOpen ? 'active' : ''}`}>
+            <li onClick={()=>{setMenu("home"); setMenuOpen(false)}}><Link style={{textDecoration:'none'}} to='/'>Home</Link>{menu==="home"?<hr/>:<></>}</li>
+            <li onClick={()=>{setMenu("collection"); setMenuOpen(false)}}><Link style={{textDecoration:'none'}} to='/collection'>Collection</Link>{menu==="collection"?<hr/>:<></>}</li>
+            <li onClick={()=>{setMenu("about"); setMenuOpen(false)}}><Link style={{textDecoration:'none'}} to='/about'>About</Link>{menu==="about"?<hr/>:<></>}</li>
+            <li onClick={()=>{setMenu("contact"); setMenuOpen(false)}}><Link style={{textDecoration:'none'}} to='/contact'>Contact</Link>{menu==="contact"?<hr/>:<></>}</li>
+            <li className="nav-mobile-account">
+                {isAuthenticated ? <><Link to='/orders' onClick={() => setMenuOpen(false)}>Orders</Link><button type="button" onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button></> : <Link to='/login' onClick={() => setMenuOpen(false)}>Login</Link>}
+            </li>
 
         </ul>
         <div className="nav-login-cart">
-            {localStorage.getItem('auth-token')?
-            <button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button>
+            <button className="nav-search-button" type="button" onClick={() => setSearchOpen((open) => !open)} aria-label="Search products">Search</button>
+            {isAuthenticated?
+            <div className="nav-account"><button className="nav-account-trigger" type="button" onClick={() => setAccountOpen((open) => !open)} aria-expanded={accountOpen}>Account <span>⌄</span></button>{accountOpen && <div className="nav-account-menu"><Link to='/orders' onClick={() => setAccountOpen(false)}>Orders</Link><button type="button" onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button></div>}</div>
             :<Link to='/login'><button>Login</button></Link>}
             
-            <Link to='/cart'><img src={cart_icon} alt="" /></Link>
-            <div className="nav-cart-count">{getTotalCartItems()}</div>
+            <Link className="nav-cart-link" to='/cart'><img src={cart_icon} alt="Cart" /><span className="nav-cart-count">{getTotalCartItems()}</span></Link>
         </div>
+        {searchOpen && <form className="nav-search-panel" onSubmit={submitSearch}><input autoFocus value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search products" /><button type="submit">Search</button></form>}
     </div>
   )
 }

@@ -1,0 +1,25 @@
+.management-page { flex: 1; min-width: 0; width: 100%; max-width: 100%; overflow-x: hidden; padding: 42px 48px; color: #202124; }
+.management-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 28px; }
+.management-heading p, .management-centered > p:first-child { margin: 0 0 8px; color: #8b5cf6; font-size: 11px; font-weight: 800; letter-spacing: 1.4px; }
+.management-heading h1, .management-centered h1 { margin: 0; font-size: 32px; }
+.management-list { display: grid; gap: 12px; }
+.management-row { display: grid; grid-template-columns: 1fr auto auto; gap: 22px; align-items: center; padding: 20px; border: 1px solid #e8e8e8; background: white; }
+.management-row h2 { margin: 0 0 6px; font-size: 16px; }
+.management-row p { margin: 0; color: #777; font-size: 13px; }
+.status { color: #16734a; font-size: 13px; font-weight: 700; }
+.status-disabled { color: #c62828; }
+.management-actions { display: flex; gap: 8px; }
+.management-actions button, .management-form button, .management-centered button { padding: 9px 13px; border: 1px solid #ddd; background: white; cursor: pointer; font-weight: 600; }
+.management-actions button:last-child { color: #c62828; }
+.management-form { display: flex; gap: 10px; margin-bottom: 24px; }
+.management-form input { padding: 10px; border: 1px solid #ddd; }
+.management-form input:first-child { flex: 1; }
+.management-form button, .management-centered button { background: #202124; color: white; }
+.management-error { padding: 12px; background: #fff0f0; color: #c62828; }
+.management-empty { padding: 36px; color: #777; text-align: center; }
+.management-centered { min-height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; }
+.management-centered > p:not(:first-child) { color: #777; }
+.management-centered button:disabled { opacity: .6; cursor: wait; }
+.management-centered strong { color: #16734a; }
+@media (max-width: 900px) { .management-page { width: 100%; padding: 28px 22px; } .management-row { grid-template-columns: 1fr auto; } .management-actions { grid-column: 1 / -1; } }
+@media (max-width: 560px) { .management-form { flex-direction: column; } .management-row { grid-template-columns: 1fr; } }

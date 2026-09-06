@@ -1,13 +1,11 @@
 /* Main hero section */
 .hero {
-    min-height: 100vh;
-    background: linear-gradient(
-        180deg, 
-        #e2e0e2 0%, 
-        rgba(176, 211, 187, 0.1) 60%
-    );
+    min-height: min(760px, calc(100vh - 78px));
+    position: relative;
+    background: linear-gradient(120deg, #e4eee6 0%, #f8f4ed 56%, #f2ded2 100%);
     display: flex;
     overflow: hidden;
+    animation: pageReveal .7s cubic-bezier(.2,.8,.2,1) both;
 }
 
 /* Left section styling */
@@ -16,23 +14,24 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2rem;
-    padding-left: clamp(2rem, 10vw, 11.25rem);
+    gap: 1.35rem;
+    padding: 72px clamp(24px, 9vw, 150px);
     line-height: 1.1;
 }
 
 .hero-left h2 {
-    color: #090909;
-    font-size: clamp(1.25rem, 2vw, 1.625rem);
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    color: var(--coral-dark);
+    font-size: clamp(.72rem, 1.2vw, .9rem);
+    font-weight: 700;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
 }
 
 .hero-left p {
-    color: #171717;
-    font-size: clamp(3rem, 8vw, 6.25rem);
-    font-weight: 700;
+    color: var(--ink);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(3.4rem, 7vw, 7rem);
+    font-weight: 600;
     line-height: 1;
     transition: font-size 0.3s ease;
 }
@@ -62,21 +61,22 @@
     gap: 0.938rem;
     width: clamp(12.5rem, 20vw, 19.375rem);
     height: clamp(2.5rem, 5vw, 4.375rem);
-    border-radius: 75px;
-    margin-top: 1.875rem;
-    background: #ff4141;
+    border-radius: 999px;
+    margin-top: 1.2rem;
+    background: var(--coral);
     color: white;
+    text-decoration: none;
     font-size: clamp(0.875rem, 1.5vw, 1.375rem);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 65, 65, 0.2);
+    box-shadow: 0 12px 24px rgba(223, 110, 85, .24);
 }
 
 .hero-latest-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 65, 65, 0.3);
-    background: #ff2c2c;
+    background: var(--coral-dark);
 }
 
 /* Right section styling */
@@ -88,7 +88,7 @@
 }
 
 .hero-right img {
-    max-width: 100%;
+    max-width: min(100%, 620px);
     height: auto;
     transition: transform 0.5s ease;
     animation: levitate 6s ease-in-out infinite;
@@ -120,7 +120,8 @@
 
 @media (max-width: 800px) {
     .hero {
-        padding: 2rem 1rem;
+        min-height: auto;
+        padding: 36px 18px 0;
     }
 }
 
@@ -140,7 +141,14 @@
     }
 
     .hero-right {
-        display: none;
+        display: flex;
+        min-height: 280px;
+        align-items: flex-end;
+    }
+
+    .hero-right img {
+        max-height: 310px;
+        object-fit: contain;
     }
 
     .hero-latest-btn {

@@ -1,0 +1,9 @@
+.info-page { width: min(1200px, calc(100% - clamp(30px, 8vw, 170px))); min-height: 60vh; margin: 85px auto; color: #222; animation: pageReveal .45s ease both; }
+.info-eyebrow { margin: 0 0 12px; color: #ff4141; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; }
+.info-page h1 { max-width: 700px; font-size: clamp(34px, 6vw, 64px); line-height: 1.05; }
+.info-lead { max-width: 680px; margin: 25px 0 60px; color: #666; font-size: 18px; line-height: 1.7; }
+.info-sections { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.info-sections section { padding: 24px; border-top: 2px solid #222; background: #fafafa; }
+.info-sections h2 { margin-bottom: 12px; font-size: 19px; }
+.info-sections p { color: #666; line-height: 1.7; }
+@media (max-width: 650px) { .info-page { width: min(100% - 30px, 520px); margin: 55px auto; } .info-sections { grid-template-columns: 1fr; } .info-lead { font-size: 16px; } }

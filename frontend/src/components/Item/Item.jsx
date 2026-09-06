@@ -3,9 +3,10 @@ import './Item.css'
 import {Link} from 'react-router-dom';
 
 export default function Item(props) {
+  const image = Array.isArray(props.image) ? props.image[0] : props.image;
   return (
     <div className='item'>
-      <Link to={`/product/${props.id}`}><img onClick={window.scrollTo(0,0)} src={props.image} alt="" /></Link>
+      <Link to={`/product/${props.id}`}><img onClick={() => window.scrollTo(0,0)} src={image} alt={props.name} /></Link>
       <p>{props.name}</p>
        <div className="item-prices">
         <div className="item-price-new">

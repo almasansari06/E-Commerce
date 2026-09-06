@@ -3,6 +3,7 @@ import './Hero.css';
 import hand_icon from '../Assets/hand_icon.png';
 import arrow_icon from '../Assets/arrow.png';
 import hero_image from '../Assets/hero_image.png';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
@@ -18,10 +19,10 @@ export default function Hero() {
         <p>Collection</p>
         <p>for everyone</p>
 
-        <div className="hero-latest-btn">
+        <Link className="hero-latest-btn" to="/collection">
           <div>Latest Collection</div>
           <img src={arrow_icon} alt="Arrow Icon" />  
-        </div>
+        </Link>
       </div>
 
       <div className="hero-right">

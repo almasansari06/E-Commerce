@@ -1,31 +1,25 @@
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 60px;
-    box-shadow: 0 1px 3px -2px #000;
-    margin-bottom: 1px;
-    background: white;
-}
-
-.nav-logo {
-    width: 200px;
-}
-
-.nav-profile {
-    width: 60px;
-}
-
-@media(max-width:800px) {
-    .navbar {
-        padding: 15px 30px;
-    }
-    
-    .nav-logo {
-        width: 150px;
-    }
-    
-    .nav-profile {
-        width: 45px;
-    }
-}
+.navbar { display: flex; align-items: center; justify-content: space-between; min-height: 76px; padding: 12px clamp(18px, 4vw, 52px); border-bottom: 1px solid #e5e8eb; background: #fff; }
+.admin-brand, .admin-user { display: flex; align-items: center; }
+.admin-brand { color: inherit; text-decoration: none; cursor: pointer; }
+.admin-brand { gap: 14px; }
+.nav-logo { width: 126px; }
+.admin-brand div { display: flex; flex-direction: column; gap: 3px; border-left: 1px solid #e5e8eb; padding-left: 14px; }
+.admin-brand strong { color: #18232e; font-size: 12px; letter-spacing: 1.5px; }
+.admin-brand span { color: #89939c; font-size: 11px; }
+.admin-user { gap: 18px; }
+.admin-online { display: flex; align-items: center; gap: 7px; color: #71808b; font-size: 12px; }
+.admin-online i { width: 7px; height: 7px; border-radius: 50%; background: #35b77a; box-shadow: 0 0 0 4px #e4f7ed; }
+.nav-profile { width: 40px; height: 40px; padding: 8px; border: 1px solid #e5e8eb; border-radius: 50%; background: #f7f9fa; }
+.admin-account { position: relative; }
+.admin-account-trigger { display: flex; align-items: center; gap: 7px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.admin-account-trigger:hover .nav-profile { border-color: #35b77a; box-shadow: 0 0 0 4px #e4f7ed; }
+.admin-account-chevron { color: #71808b; font-size: 17px; line-height: 1; }
+.admin-account-menu { position: absolute; top: calc(100% + 14px); right: 0; z-index: 20; width: 220px; padding: 8px; border: 1px solid #e1e6ea; border-radius: 14px; background: #fff; box-shadow: 0 16px 36px rgba(28, 44, 56, .14); animation: accountMenuIn .18s ease both; }
+.admin-account-heading { display: grid; gap: 3px; padding: 12px; margin-bottom: 5px; border-bottom: 1px solid #edf0f2; }
+.admin-account-heading strong { color: #18232e; font-size: 13px; }
+.admin-account-heading span { color: #89939c; font-size: 11px; }
+.admin-account-menu a, .admin-account-menu button { display: block; width: 100%; padding: 11px 12px; border: 0; border-radius: 8px; background: transparent; color: #3e4c57; cursor: pointer; font: inherit; font-size: 13px; text-align: left; text-decoration: none; }
+.admin-account-menu a:hover, .admin-account-menu button:hover { background: #f1f7f3; color: #238052; transform: none; }
+.admin-account-menu button { color: #b2483b; }
+@keyframes accountMenuIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+@media(max-width: 600px) { .navbar { min-height: 64px; padding: 10px 16px; } .nav-logo { width: 100px; } .admin-brand div { display: none; } .admin-online { display: none; } .nav-profile { width: 36px; height: 36px; } .admin-account-menu { right: -4px; } }

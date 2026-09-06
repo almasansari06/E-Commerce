@@ -1,70 +1,62 @@
-import React,{useState}from 'react'
+import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
 
 export default function LoginSignup() {
 
-const [state,setState] = useState("Login",);
-const[formData,setFormData] = useState({
-  username:'',
-  password:'',
-  email:'',
-})
+const [state, setState] = useState('Login');
+const [formData, setFormData] = useState({
+  name: '',
+  password: '',
+  email: '',
+});
+const [error, setError] = useState('');
+const [isSubmitting, setIsSubmitting] = useState(false);
 
-const changeHandler =(e)=>{
-  setFormData({...formData,[e.target.name]:e.target.value})
+const changeHandler = (event) => {
+  setFormData({ ...formData, [event.target.name]: event.target.value });
+  setError('');
 }
 
-const login =async()=>{
-  console.log('login',formData)
-  let responseData;
-  await fetch('http://localhost:4000/login',{
-    method:'POST',
-    headers:{
-      Accept : 'application/form-data',
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify(formData)
-  }).then((response)=>response.json()).then((data)=>responseData=data)
-  if(responseData.success){
-    localStorage.setItem('auth-token',responseData.token)
-    window.location.replace("/");
-  }
-  else{
-    alert(responseData.message)
-  }
+const submitHandler = async (event) => {
+  event.preventDefault();
+  setIsSubmitting(true);
+  setError('');
 
-}
+  try {
+    const endpoint = state === 'Login' ? '/login' : '/signup';
+    const response = await fetch(`http://localhost:4000${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    const responseData = await response.json();
 
-const signup =async()=>{
-  console.log('signup',formData)
-    let responseData;
-  await fetch('http://localhost:4000/signup',{
-    method:'POST',
-    headers:{
-      Accept : 'application/form-data',
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify(formData)
-  }).then((response)=>response.json()).then((data)=>responseData=data)
-  if(responseData.success){
-    localStorage.setItem('auth-token',responseData.token)
-    window.location.replace("/");
+    if (!response.ok || !responseData.success) {
+      throw new Error(responseData.message || 'Something went wrong.');
+    }
+
+    localStorage.setItem('auth-token', responseData.token);
+    window.location.replace('/');
+  } catch (requestError) {
+    setError(requestError.message || 'Unable to connect to the server.');
+  } finally {
+    setIsSubmitting(false);
   }
-  else{
-    alert(responseData.message)
-  }
-}
+};
 
   return (
     <div className='loginsignup'>
       <div className="loginsignup-container">
         <h1>{state}</h1>
-        <div className="loginsignup-fields">
-        {state === "Sign Up" ? <input name='username' value={formData.username} onChange={changeHandler} type="text" placeholder='Your Name' />:<></>}
-          <input name='email' value={formData.email} onChange={changeHandler} type="email"placeholder='Email Address' />
-          <input name='password' value={formData.password} onChange={changeHandler} type="password"placeholder='Password' />
-        </div>
-        <button onClick={()=>{state==="Login"?login():signup()}}>Continue</button>
+        <form onSubmit={submitHandler}>
+          <div className="loginsignup-fields">
+            {state === 'Sign Up' && <input required name='name' value={formData.name} onChange={changeHandler} type="text" placeholder='Full name' />}
+            <input required name='email' value={formData.email} onChange={changeHandler} type="email" placeholder='Email address' />
+            <input required minLength="6" name='password' value={formData.password} onChange={changeHandler} type="password" placeholder='Password' />
+          </div>
+          {error && <p className="loginsignup-error">{error}</p>}
+          <button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Please wait...' : 'Continue'}</button>
+        </form>
         {state==="Sign Up"
         ?<p className="loginsignup-login">Already have an account? <span onClick ={()=>{setState("Login")}}>Login here</span></p>
       :<p className="loginsignup-login">Create an account? <span onClick ={()=>{setState("Sign Up")}}>Click here</span></p>}

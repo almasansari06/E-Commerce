@@ -1,5 +1,5 @@
 .descriptionbox{
-    margin: 120px 170px;
+    margin: 90px clamp(15px, 12vw, 170px);
 
 }
 .descriptionbox-navigator{
@@ -15,6 +15,10 @@
     width: 171px;
     height: 70px;
     border: 1px solid #d0d0d0;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+    font-family: inherit;
 }
 .descriptionbox-nav-box.fade{
     background: #fbfbfb;
@@ -27,4 +31,44 @@
     border: 1px solid #D0D0D0;
     padding: 48px;
     padding-bottom: 70px;
+    line-height: 1.7;
+    color: #555;
+}
+
+@media (max-width: 600px) {
+    .descriptionbox {
+        margin: 55px 15px;
+    }
+
+    .descriptionbox-nav-box {
+        width: 50%;
+        height: 54px;
+        font-size: 14px;
+    }
+
+    .descriptionbox-description {
+        padding: 24px;
+        padding-bottom: 30px;
+    }
+}
+
+.descriptionbox-reviews article {
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.descriptionbox-reviews article > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.descriptionbox-reviews article span {
+    color: #eda52c;
+    letter-spacing: 2px;
+}
+
+.descriptionbox-reviews article p {
+    margin-top: 8px;
+    color: #666;
 }

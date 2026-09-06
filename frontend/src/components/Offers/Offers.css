@@ -1,17 +1,13 @@
 /* Main container */
 .offers {
-    width: min(65%, 1200px);
-    min-height: 60vh;
+    width: min(1380px, calc(100% - clamp(30px, 6vw, 120px)));
+    min-height: 470px;
     display: flex;
-    margin: 2rem auto 9.375rem;
-    padding: clamp(1rem, 5vw, 8.75rem);
-    background: linear-gradient(
-        180deg, 
-        #fde1ff 0%, 
-        #e1ffea22 60%
-    );
-    border-radius: 1.25rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 110px;
+    padding: clamp(36px, 6vw, 92px);
+    background: linear-gradient(120deg, #dce8de, #ecf1e9 58%, #f2ddd1);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
 }
 
 /* Left section */
@@ -25,8 +21,9 @@
 }
 
 .offers-left h1 {
-    color: #171717;
-    font-size: clamp(2rem, 5vw, 5rem);
+    color: var(--ink);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.4rem, 5vw, 5.4rem);
     font-weight: 600;
     line-height: 1.2;
     margin: 0;
@@ -34,7 +31,7 @@
 }
 
 .offers-left p {
-    color: #171717;
+    color: var(--coral-dark);
     font-size: clamp(1rem, 2vw, 1.375rem);
     font-weight: 600;
     margin: 0;
@@ -44,19 +41,19 @@
     width: fit-content;
     padding: 1rem 2.5rem;
     border-radius: 35px;
-    background: #ff4141;
+    background: var(--coral);
     border: none;
     color: white;
     font-size: clamp(0.875rem, 1.5vw, 1.375rem);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 65, 65, 0.2);
+    box-shadow: 0 12px 24px rgba(223, 110, 85, .24);
 }
 
 .offers-left button:hover {
     transform: translateY(-2px);
-    background: #ff2c2c;
+    background: var(--coral-dark);
     box-shadow: 0 6px 20px rgba(255, 65, 65, 0.3);
 }
 

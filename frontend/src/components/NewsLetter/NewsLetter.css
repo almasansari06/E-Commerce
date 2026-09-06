@@ -1,28 +1,25 @@
 /* Main container */
 .newsletter {
-    width: min(65%, 1200px);
-    min-height: 40vh;
+    width: min(1180px, calc(100% - 48px));
+    min-height: 360px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 3rem auto 9rem;
-    padding: clamp(2rem, 5vw, 8rem);
-    background: linear-gradient(
-        180deg, 
-        #fde1ff 0%, 
-        #e1ffea22 60%
-    );
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: clamp(2rem, 5vw, 7rem);
+    background: var(--ink);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
     gap: clamp(1.5rem, 3vw, 2rem);
     animation: fadeIn 0.8s ease-out;
 }
 
 /* Typography */
 .newsletter h1 {
-    color: #454545;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #fffaf2;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
     font-weight: 600;
     text-align: center;
     margin: 0;
@@ -31,7 +28,7 @@
 }
 
 .newsletter p {
-    color: #454545;
+    color: #b9c8bd;
     font-size: clamp(1rem, 2vw, 1.25rem);
     text-align: center;
     max-width: 600px;
@@ -48,7 +45,7 @@
     width: min(90%, 730px);
     height: clamp(50px, 8vh, 70px);
     border-radius: 40px;
-    border: 1px solid #e3e3e3;
+    border: 1px solid #d6dfd8;
     overflow: hidden;
     transition: all 0.3s ease;
     animation: scaleIn 0.6s ease-out 0.4s both;
@@ -56,7 +53,7 @@
 
 .newsletter div:focus-within {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-color: #fde1ff;
+    border-color: var(--coral);
 }
 
 /* Input field */
@@ -65,7 +62,7 @@
     padding: 0 clamp(1rem, 3vw, 2rem);
     border: none;
     outline: none;
-    color: #616161;
+    color: var(--ink);
     font-family: 'Poppins', sans-serif;
     font-size: clamp(0.875rem, 1.5vw, 1rem);
 }
@@ -76,7 +73,7 @@
     height: 100%;
     border: none;
     border-radius: 40px;
-    background: #171717;
+    background: var(--coral);
     color: white;
     font-size: clamp(0.875rem, 1.5vw, 1rem);
     font-weight: 500;
@@ -85,7 +82,7 @@
 }
 
 .newsletter div button:hover {
-    background: #454545;
+    background: var(--coral-dark);
     transform: translateY(-1px);
 }
 

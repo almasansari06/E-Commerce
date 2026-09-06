@@ -1,15 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CartItems.css';
 import { ShopContext } from '../../Context/ShopContext';
 import remove_icon from '../Assets/cart_cross_icon.png';
 
 export default function CartItems() {
-    const {getTotalCartAmount, all_product, cartItems, removeFromCart } = useContext(ShopContext);
+    const { all_product, cartItems, selectedCartItems, toggleCartSelection, removeFromCart, getSelectedCartAmount, getDiscountedSelectedCartAmount, getSelectedCartItems, applyCoupon, appliedCoupon, setAppliedCoupon } = useContext(ShopContext);
+    const navigate = useNavigate();
+    const [couponCode, setCouponCode] = useState('');
+    const [couponMessage, setCouponMessage] = useState('');
+    const [couponLoading, setCouponLoading] = useState(false);
+
+    const handleCoupon = async () => {
+        setCouponLoading(true);
+        setCouponMessage('');
+        try {
+            const coupon = await applyCoupon(couponCode);
+            setCouponMessage(`${coupon.discountPercentage}% discount applied`);
+        } catch (error) {
+            setAppliedCoupon(null);
+            setCouponMessage(error.message);
+        } finally {
+            setCouponLoading(false);
+        }
+    };
 
     return (
         <div className="cartitems-container">
             <div className="cartitem-format-main">
-                <p>Products</p>
+                <p>Select</p>
                 <p>Title</p>
                 <p>Price</p>
                 <p>Quantity</p>
@@ -20,8 +39,9 @@ export default function CartItems() {
             {all_product.map((e) => {
                 if (cartItems[e.id] > 0) {
                     return (
-                        <div>
+                        <div key={e.id}>
                             <div className="cartitems-format cartitem-format-main">
+                                <input className="cartitems-select" type="checkbox" checked={Boolean(selectedCartItems[e.id])} onChange={() => toggleCartSelection(e.id)} aria-label={`Select ${e.name} for checkout`} />
                                 <img src={e.image} alt={e.name} className="carticon-product-icon" />
                                 <p>{e.name}</p>
                                 <p>${e.new_price}</p>
@@ -40,9 +60,10 @@ export default function CartItems() {
                     <h1>Cart Totals</h1>
                     <div>
                         <div className="cartitems-total-item">
-                            <p>Subtotal</p>
-                            <p>${getTotalCartAmount()}</p>
+                            <p>Selected subtotal</p>
+                            <p>${getSelectedCartAmount()}</p>
                         </div>
+                        {appliedCoupon && <div className="cartitems-total-item cartitems-discount"><p>Discount ({appliedCoupon.discountPercentage}%)</p><p>-${(getSelectedCartAmount() - getDiscountedSelectedCartAmount()).toFixed(2)}</p></div>}
                         <hr />
                         <div className="cartitems-total-item">
                             <p>Shipping Fee</p>
@@ -51,17 +72,18 @@ export default function CartItems() {
                         <hr />
                         <div className="cartitems-total-item">
                             <h3>Total</h3>
-                            <h3>${getTotalCartAmount()}</h3>
+                            <h3>${getDiscountedSelectedCartAmount().toFixed(2)}</h3>
                         </div>
                     </div>
-                    <button>PROCED TO CHECKOUT</button>
+                    <button type="button" disabled={getSelectedCartItems() === 0} onClick={() => navigate('/checkout')}>PROCEED TO CHECKOUT ({getSelectedCartItems()})</button>
                 </div>
                 <div className="caritems-promocode">
                     <p>If you have a promo code, Enter it here</p>
                     <div className="cartitems-promobox">
-                        <input type="text" placeholder='promocode' />
-                        <button>Submit</button>
+                        <input type="text" value={couponCode} onChange={(event) => setCouponCode(event.target.value)} placeholder='promocode' />
+                        <button type="button" onClick={handleCoupon} disabled={couponLoading || !couponCode.trim()}>{couponLoading ? 'Checking...' : 'Apply'}</button>
                     </div>
+                    {couponMessage && <p className="cartitems-coupon-message">{couponMessage}</p>}
                 </div>
             </div>
         </div>

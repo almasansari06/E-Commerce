@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './NewCollections.css'
 import Item from '../Item/Item'
+import { Link } from 'react-router-dom'
 
 export default function NewCollection() {
 
@@ -9,7 +10,8 @@ export default function NewCollection() {
    useEffect(() => {
     fetch('http://localhost:4000/newcollections')
         .then((response) => response.json())
-        .then((data) => setNew_collection(data));
+      .then((data) => setNew_collection(Array.isArray(data) ? data : []))
+      .catch(() => setNew_collection([]));
 }, []);
   return (
     <div className='new-collections'>
@@ -20,6 +22,7 @@ export default function NewCollection() {
                  return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price}/>
         })}
       </div>
+      <Link className="new-collections-more" to="/collection">View more <span>→</span></Link>
     </div>
   )
 }

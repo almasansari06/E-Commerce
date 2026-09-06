@@ -1,22 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './DescriptionBox.css'
 
 
-export default function DescriptionBox() {
+export default function DescriptionBox({ product }) {
+  const reviews = Array.isArray(product?.reviews) ? product.reviews : [];
+  const description = product?.description || 'No description has been added for this product yet.';
+  const [activeTab, setActiveTab] = useState('description');
+  const [latestReviews, setLatestReviews] = useState(reviews);
+
+  const showReviews = async () => {
+    setActiveTab('reviews');
+    try {
+      const response = await fetch('http://localhost:4000/allproducts');
+      const products = await response.json();
+      const currentProduct = products.find((item) => item.id === product.id);
+      setLatestReviews(Array.isArray(currentProduct?.reviews) ? currentProduct.reviews : []);
+    } catch (error) {
+      setLatestReviews(reviews);
+    }
+  };
   return (
     <div className='descriptionbox'>
       <div className="descriptionbox-navigator">
-        <div className="descriptionbox-nav-box">Description</div>
-        <div className="descriptionbox-nav-box fade">Reviews (122)</div>
+        <button type="button" className={`descriptionbox-nav-box ${activeTab === 'description' ? '' : 'fade'}`} onClick={() => setActiveTab('description')}>Description</button>
+        <button type="button" className={`descriptionbox-nav-box ${activeTab === 'reviews' ? '' : 'fade'}`} onClick={showReviews}>Reviews ({latestReviews.length})</button>
       </div>
-      <div className="descriptionbox-description">
-        <p>
-        An e-commerce website is an online platform that facilitates the buying and solling of products or sanvices over the internet, it serves as a virtual marketplace where txusinesses and Individuals can showcase their products, interact with customers, and conduct transactions without the need for a physical presence. E-commerce websites have gained immense popularity due to their convenience, accessibility, and the global reach they offer.
-        </p>
-        <p>
-        E-commerce websites typically display products or services along with detailed descriptions, images, prices, and any available variations (eg, sites, colors), (ach product ususty has its own dedicated page with relevant information.
-        </p>
-      </div>
+      {activeTab === 'description' ? <div className="descriptionbox-description"><p>{description}</p></div> : <div className="descriptionbox-description descriptionbox-reviews">
+        {latestReviews.length === 0 ? <p>No reviews yet. Be the first to review this product.</p> : latestReviews.map((review) => <article key={`${review.userId}-${review.date}`}><div><strong>{review.name || 'Customer'}</strong><span>{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span></div><p>{review.comment}</p></article>)}
+      </div>}
     </div>
   )
 }
